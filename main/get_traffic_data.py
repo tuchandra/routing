@@ -17,7 +17,7 @@ def get_data(color):
        or high-traffic. This determines the request to execute
 
     return
-     - segments: List[int] - list of segment IDs that have that type of
+     - roads: List[int] - list of segment IDs that have that type of
        traffic.
     """
     
@@ -49,14 +49,14 @@ def get_data(color):
     # 
 
     response_values = response["sra_" + color]
-    segments = map(lambda value: int(value["segmentid"]), response_values)
-    segments = list(segments)
+    roads = map(lambda value: int(value["segmentid"]), response_values)
+    roads = list(roads)
 
-    return segments
+    return roads
 
 
 def parse_poly1():
-    """Read the data from poly1.txt and return segment : lat/lon info.
+    """Read the data from poly1.txt and return segmentID : lat/lon info.
 
     params
      - None, but expects file data/poly1.txt to exist
@@ -102,7 +102,7 @@ def parse_poly1():
     return geo
 
 
-def write_to_csv(all_segments, geo, out_fn):
+def write_to_csv(all_roads, geo, out_fn):
     """Write traffic information to a CSV file.
 
     Output format is [segment_id, color, origin_lon, origin_lat,
@@ -116,7 +116,7 @@ def write_to_csv(all_segments, geo, out_fn):
     and another from (3,4) --> (5,6).
 
     params
-     - all_segments: Dict[str : List[int]] - strings are red/yellow/green,
+     - all_roads: Dict[str : List[int]] - strings are red/yellow/green,
        values are list of segment IDs that have that type of traffic.
      - geo: Dict[int : List[pair]], with pair = {"x": float,"y": float},
        and the int key is the segment ID
@@ -135,35 +135,35 @@ def write_to_csv(all_segments, geo, out_fn):
         csvwriter.writerow(output_header)
 
         for color in ['green', 'yellow', 'red']:
-            segments = all_segments[color]
-            for segment_id in segments:
-                # polyline is a list of coordinates, {x:___, y:___}.
+            roads = all_roads[color]
+            for road_id in roads:
+                # road is a list of coordinates, {x:___, y:___}.
                 # we want to encode each pair of coordinates as its
                 # own row in the CSV.
-                polyline = geo[segment_id]
-                for origin, dest in zip(polyline, polyline[1:]):
+                road = geo[road_id]
+                for origin, dest in zip(road, road[1:]):
                     origin_lon = origin['x']
                     origin_lat = origin['y']
                     dest_lon = dest['x']
                     dest_lat = dest['y']
 
-                    row = [segment_id, color, origin_lon, origin_lat,
+                    row = [road_id, color, origin_lon, origin_lat,
                            dest_lon, dest_lat]
                     csvwriter.writerow(row)
 
                     segments_written += 1
                     if segments_written % 100 == 0:
-                        print(f"Added {segments_written} roads so far.")
+                        print(f"Added {segments_written} segments so far.")
 
             print(f"Added all {color} roads.")
 
 if __name__ == "__main__":
     # Get all traffic data
-    all_segments = {
+    all_roads = {
         # color: List[int]
     }
     for color in ['green', 'yellow', 'red']:
-        all_segments[color] = get_data(color)
+        all_roads[color] = get_data(color)
 
     # Read data downloaded from City of Chicago traffic tracker website.
     # Stored in poly1.txt, which is extremely messy.
@@ -174,5 +174,5 @@ if __name__ == "__main__":
 
     # Dump to CSV
     out_fn = SCRIPT_DIR + "/data/traffic.csv"
-    write_to_csv(all_segments, geo, out_fn)
+    write_to_csv(all_roads, geo, out_fn)
 
