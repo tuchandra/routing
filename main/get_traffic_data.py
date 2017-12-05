@@ -103,58 +103,6 @@ def parse_poly1():
     return geo
 
 
-def parse_poly3():
-    """Read the data from poly3.txt and return segment : lat/lon info.
-
-    params
-     - None, but expects file data/poly3.txt to exist
-
-    return
-     - geo: Dict[int : List[pair]], where pair = {"x": float, "y": float},
-       and the int key is the segment ID
-    """
-
-    geo = {
-        # int : List[{'x': float, 'y': float}]
-    }
-
-    # Why on earth these variables have different formats is beyond me
-    poly3_fname = SCRIPT_DIR + "/data/poly3.txt"
-    with open(poly3_fname) as poly3:
-        assert next(poly3).strip() == "{"
-
-        # Line format:
-        # "111":[[{x:-87.aa,y:41.bb}, {x:-87.cc,y:41.dd}, ...]],
-        # so line.strip().split(":")[0] gives the segment ID,
-        # and everything after is the rest of the line.
-        for line in poly3:
-            # Last line
-            if line.strip() == "}":
-                break
-
-            line = line.strip().split(":")
-            print(line)
-            # This is absolutely insane, but the first token is '"1"',
-            # which does not evaluate to an integer directly, so split
-            # on the double quote
-            segment_id = int(line[0].split('"')[1])
-            rest = ":".join(line[1:])
-
-            # Remove possible trailing comma -- always there except last line
-            if rest[-1] == ",":
-                rest = rest[:-1]
-
-            # Convert to proper JSON by quoting keys x and y
-            rest = rest.replace('x', '"x"').replace('y', '"y"')
-            print (rest)
-            rest = json.loads(rest)
-            coords = rest[0]  # list of pairs
-
-            geo[segment_id] = coords
-
-    return geo
-
-
 if __name__ == "__main__":
     # Get all traffic data
     segments = {
@@ -169,5 +117,4 @@ if __name__ == "__main__":
     #
     # TODO: put in README where poly1 came from. poly2 and
     # poly4 are empty. poly3 is I think the regions.
-    geo1 = parse_poly1()
-    geo3 = parse_poly3()
+    geo = parse_poly1()
