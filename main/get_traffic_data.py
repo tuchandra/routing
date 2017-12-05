@@ -105,7 +105,7 @@ def parse_poly1():
 def write_to_csv(all_roads, geo, out_fn):
     """Write traffic information to a CSV file.
 
-    Output format is [segment_id, color, origin_lon, origin_lat,
+    Output format is [road_id, color, origin_lon, origin_lat,
     dest_lon, dest_lat]. Color is one of 'red', 'yellow', 'green'.
 
     Where the road segment is a polyline (i.e., length of list is more
@@ -126,7 +126,7 @@ def write_to_csv(all_roads, geo, out_fn):
      - none, but writes data to CSV
     """
 
-    output_header = ["segment_id", "color", "origin_lon",
+    output_header = ["road_id", "color", "origin_lon",
                      "origin_lat", "dest_lon", "dest_lat"]
 
     segments_written = 0
