@@ -109,7 +109,7 @@ if __name__ == "__main__":
         # color: List[int]
     }
     for color in ['green', 'yellow', 'red']:
-        ...#segments[color] = get_data(color)
+        segments[color] = get_data(color)
 
     # Read data downloaded from City of Chicago traffic tracker website
     # and parse into a dictionary -- stored in poly1.txt, which is
