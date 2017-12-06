@@ -1,15 +1,18 @@
 import csv
 import sys
 import json
-from random import random, randint
+import os
+
 from math import floor
+from random import random, randint
 
 from geopy.distance import vincenty
 from geopy.distance import great_circle
 from shapely.geometry import shape, Point
 
-ODPAIRS_PER_CITY = 10
+ODPAIRS_PER_CITY = 2000
 OUTPUT_HEADER = ["ID", "origin_lon", "origin_lat", "destination_lon", "destination_lat", "straight_line_distance"]
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 def odpairs_from_grid_centroids(input_geojson_fn, output_csv_fn, min_dist, max_dist):
     """Randomly select origin-destination pairs from combinations of grid cells.
@@ -80,11 +83,12 @@ def get_distance(orig_pt, dest_pt):
 def main():
     min_dist = 0
     max_dist = 20  # distance in KM
-    data_folder = "data"
-    city = "chicago"
 
-    odpairs_from_grid_centroids(input_geojson_fn = f"{data_folder}/{city}_grid.geojson",
-                                output_csv_fn = f"{data_folder}/small_{city}_od_pairs.csv",
+    input_geojson_fn = SCRIPT_DIR + "/data/chicago_grid.geojson"
+    output_csv_fn = SCRIPT_DIR + "/data/chicago_od_pairs.csv"
+
+    odpairs_from_grid_centroids(input_geojson_fn = input_geojson_fn,
+                                output_csv_fn = output_csv_fn,
                                 min_dist = min_dist,
                                 max_dist = max_dist)
 
