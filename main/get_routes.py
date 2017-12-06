@@ -225,17 +225,6 @@ class GoogleAPI(API):
 
 
 def main():
-#    parser = argparse.ArgumentParser()
-#    parser.add_argument("start_time", type=int, help="## between 00 and 24")
-#    args = parser.parse_args()
-#
-#    # Sleep if the start_time is in the future
-    current_time = datetime.datetime.now()
-    # start_time = datetime.datetime(year = current_time.year, month = current_time.month, day = current_time.day, hour = args.start_time)
-    start_time = current_time
-    sleep_for = (start_time - current_time).seconds
-    print("Will sleep for {0} seconds before starting.".format(sleep_for))
-
     input_odpairs_fn = "data/chicago_od_pairs.csv"
     output_routes_g_fn = "data/chicago_google_routes.csv"
 
@@ -277,7 +266,6 @@ def main():
         g = GoogleAPI(api_key_fn = "api_keys/google.txt", api_limit = 2400, 
                       stop_at_api_limit = True, output_num = 2)
         
-        time.sleep(sleep_for)
         g.write_to_log("LOG", "Starting script.")
 
         for od_pair in od_pairs:
@@ -293,13 +281,9 @@ def main():
                 if g.queries_made % 100 == 0:
                     g.write_to_log("LOG", "Every 100 query check")
 
-                # when almost hit API limit, shut-down
+                # when almost hit API limit, shutdown
                 if g.stop_at_api_limit and g.queries_made == g.api_limit:
-                    current_time = datetime.datetime.now()
-                    sleep_for = (start_time - current_time).seconds
-                    g.write_to_log("API LIMIT", "Script sleeping for {0} seconds. Current route ID is {1}".format(sleep_for, od_pair['id']))
-                        
-                    time.sleep(sleep_for)
+                    g.write_to_log("API LIMIT", f"Current route ID is {od_pair['id']}")
                     g.reset()
                 else:
                     # be nice to API
