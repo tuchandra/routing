@@ -226,7 +226,7 @@ class GoogleAPI(API):
 
 def main():
     input_odpairs_fn = "data/chicago_od_pairs.csv"
-    output_routes_g_fn = "data/chicago_google_routes.csv"
+    output_routes_g_fn = "data/chicago_routes_gmaps.csv"
 
     # Read all origin/destination pairs from CSV into list
     od_pairs = []
@@ -278,8 +278,8 @@ def main():
                     g.write_to_log("TOO MANY EXCEPTIONS", "{0} exceptions reached. Should be halting script".format((g.exceptions, m.exceptions)))
                     #break
 
-                if g.queries_made % 100 == 0:
-                    g.write_to_log("LOG", "Every 100 query check")
+                if g.queries_made % 10 == 0:
+                    g.write_to_log("LOG", "Every 10 query check")
 
                 # when almost hit API limit, shutdown
                 if g.stop_at_api_limit and g.queries_made == g.api_limit:
