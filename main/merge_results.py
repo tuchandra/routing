@@ -17,7 +17,7 @@ def main():
     gh_csv = DATA_DIR + f"chicago_routes_gh_{optimization}.csv"
     output_csv = DATA_DIR + f"chicago_routes_{optimization}_merged.csv"
 
-    threshold = 0.20  # error tolerance between distance results
+    threshold = 0.10  # error tolerance between distance results
 
     print(f"\nMerging {gmaps_csv} and {gh_csv} with {threshold} threshold " +
           f"and output to {output_csv}.")
