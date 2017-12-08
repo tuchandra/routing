@@ -26,7 +26,7 @@ def main():
         "fastest_gh" : DATA_DIR + "chicago_routes_gh_fastest.csv",
     }
 
-    output_geojson = DATA_DIR + "route_diffs_{f1}_{f2}"
+    output_geojson = DATA_DIR + f"route_diffs_{arg1}_{arg2}.geojson"
     f1 = fnames[arg1]
     f2 = fnames[arg2]
 
@@ -154,7 +154,7 @@ def weighted_line(f1, f2, output_geojson):
     print(f"Found {len(all_segments)} segments in total")
 
     # Resample route IDs
-    iterations = 10
+    iterations = 500
     route_ids = list(features1.keys())
     for i in range(iterations):
         sampled_ids = random.choices(route_ids, k = len(route_ids))  # as of 3.6
@@ -163,7 +163,8 @@ def weighted_line(f1, f2, output_geojson):
         for segment in all_segments:
             all_segments[segment].append(segment_diffs.get(segment, 0))
 
-        print(f"Finished iteration {i+1} of {iterations}")
+        if i % 10 == 9:
+            print(f"Finished iteration {i+1} of {iterations}")
 
 
     # Calculate significance -- for each segment, look at the set of
@@ -174,16 +175,18 @@ def weighted_line(f1, f2, output_geojson):
     # is a key into all_segments whose value is the list of differences
     # observed in resampling. We replace the list with the summary statistics
     # once they are computed.
-    alpha = 0.05  # significance level
+    alpha = 0.01  # significance level
     for i, segment in enumerate(all_segments):
         sorted_segment_diffs = sorted(all_segments[segment])
         lower = sorted_segment_diffs[int(iterations * alpha / 2)]
         upper = sorted_segment_diffs[int(iterations * (1 - alpha) / 2)]
         median = sorted_segment_diffs[int(iterations / 2)]
+        mean = sum(sorted_segment_diffs) / iterations
 
         significant = (lower > 0 and upper > 0) or (lower < 0 and upper < 0)
         all_segments[segment] = {'lower': lower, 'upper': upper,
-                                 'median': median, 'significant':significant}
+                                 'median': median, 'significant':significant,
+                                 'mean': mean}
 
         if i % 1000 == 999:
             print(f"Processed {i+1} out of {len(all_segments)}")
@@ -196,6 +199,7 @@ def weighted_line(f1, f2, output_geojson):
                            'lower': all_segments[feature]['lower'],
                            'upper': all_segments[feature]['upper'],
                            'median': all_segments[feature]['median'],
+                           'mean': all_segments[feature]['mean'],
                            'significant': all_segments[feature]['significant']
                         }
                    )
