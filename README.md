@@ -1,6 +1,8 @@
 # routing
 Algorithmically auditing Google Maps routes produced during heavy traffic in the City of Chicago.
 
+<img src="https://github.com/tuchandra/routing/blob/master/images/gmaps-with-legend.png?raw=true" width="300" height="600">
+
 ## Overview
 This is a research project to algorithmically audit Google Maps in heavy Chicago traffic. We compare the routes obtained from Google Maps to routes created with an open-source routing library, GraphHopper, using live traffic data from the City of Chicago. We use a [custom fork of GraphHopper](https://github.com/tuchandra/graphhopper), but the [original repo](https://github.com/graphhopper/graphhopper/) will of course be most up-to-date.
 
