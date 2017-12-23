@@ -13,7 +13,7 @@ These files are based off Isaac Johnson's work in his [route-externalities](http
 
 `get_routes.py` - get the routes from the Google Maps API. Originally designed to handle both Google Maps and Mapquest, but repurposed here for Google Maps alone, the design of this script could be simplified. This requires an API key to exist in the location `api_keys/google.txt`.
 
-`get_traffic_data.py` - read live traffic data from the City of Chicago.
+`get_traffic_data.py` - read live traffic data from the City of Chicago. This uses `main/data/poly1.txt`, which may be out of date since the time of writing (it's a gigantic variable lifted from the source code of their traffic tracker).
 
 `diff_segments.py` - compute differences between all the sets of routes generated
 
