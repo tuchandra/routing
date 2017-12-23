@@ -7,7 +7,7 @@ This is a research project to algorithmically audit Google Maps in heavy Chicago
 ## Included Files
 These files are based off Isaac Johnson's work in his [route-externalities](https://github.com/joh12041/route-externalities/) repository.
 
-`grid_creation.py <input GeoJSON file> <output folder>` - this takes a GeoJSON file representing a city (we use Chicago) and creates a square grid for the city. Takes as arguments the aforementioned GeoJSON file and an output folder. This is the only file that takes command line inputs.
+`grid_creation.py <input GeoJSON file> <output folder>` - this takes a GeoJSON file representing a city (we use Chicago) and creates a square grid for the city. Takes as arguments the aforementioned GeoJSON file and an output folder. This is the only file that takes command line inputs, but we include the GeoJSON file used in `main/data/chicago_boundary.geojson`
 
 `generate_od_pairs.py` - takes the grids from above and generates origin-destination pairs (OD pairs).
 
